@@ -82,6 +82,14 @@ def check_char(c, word):
         print(ok2)
         return ok2
 
+def check_word():
+    mystr =""
+    for i in sequence:
+        mystr=mystr+i
+
+    if mystr == word:
+        print("hai vinto")
+
 def main():
     player1 = insert_player()
     player2 = insert_player()
@@ -92,7 +100,7 @@ def main():
         state2 = True
         while state2:
             state2 = turn(player1)
-        
+            check_word()
         turn(player2)
         break
 
