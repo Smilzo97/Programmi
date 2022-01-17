@@ -4,7 +4,7 @@ import string
 
 winners_list=[]
 winner = ""
-sequence ="_ "
+sequence = ""
 word = " "
 
 def import_word_file():
@@ -36,8 +36,8 @@ def initialize():
         keyboard.append(random.choice(string.ascii_letters).upper())  
     #print(keyboard)
     for char in word:
-        global sequence
-        sequence = sequence + "_ "
+        global sequence 
+        sequence = sequence + str("_ ")
         keyboard.append(char.upper())  
     #print(keyboard)
     random.shuffle(keyboard)
@@ -54,7 +54,10 @@ def turn (name):
 def reveal_char(c):
     for i in range(len(word)):
         if c == word[i]:
-            sequence[i] = c.upper()
+           #print(i)
+           #print(type(sequence))
+           global sequence
+           sequence = sequence[:i] + c + sequence[i+1:]
 
 def check_char(c, word):
     print(word)
@@ -73,6 +76,8 @@ def main():
         #il gioco inizia
         #while ok:
         turn(player1)
+        
+        turn(player2)
         print(sequence)
         break
 
