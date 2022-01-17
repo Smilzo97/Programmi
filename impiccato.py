@@ -4,9 +4,13 @@ import string
 
 winners_list=[]
 winner = ""
-sequence = ""
+sequence = []
 word = " "
+ok = True
+#global state2
+#state2 = True 
 
+global state2
 def import_word_file():
     df_words = pd.read_csv("https://raw.githubusercontent.com/Smilzo97/Programmi/Inizio/lista_parole.csv")
     #print(df_words)
@@ -37,7 +41,7 @@ def initialize():
     #print(keyboard)
     for char in word:
         global sequence 
-        sequence = sequence + str("_ ")
+        sequence.append("_ ")
         keyboard.append(char.upper())  
     #print(keyboard)
     random.shuffle(keyboard)
@@ -52,21 +56,31 @@ def turn (name):
     return state
 
 def reveal_char(c):
+    global ok
+    count = 0 
     for i in range(len(word)):
         if c == word[i]:
-           #print(i)
-           #print(type(sequence))
            global sequence
-           sequence = sequence[:i] + c + sequence[i+1:]
+           sequence[i] = c
+           count= count+1
 
+        if count == 0:
+           ok = False
+        else:
+            ok = True
+    print(ok)
+    return ok
+
+           
 def check_char(c, word):
     print(word)
     if c in word:
         print("letetra presente")
         keyboard.remove(c.upper())
-        reveal_char(c)
+        ok2 = reveal_char(c)
         print(sequence)
-        return True
+        print(ok2)
+        return ok2
 
 def main():
     player1 = insert_player()
@@ -74,11 +88,12 @@ def main():
     while True:
         initialize()
         #il gioco inizia
-        #while ok:
-        turn(player1)
+        global state2
+        state2 = True
+        while state2:
+            state2 = turn(player1)
         
         turn(player2)
-        print(sequence)
         break
 
 if __name__ == "__main__":
