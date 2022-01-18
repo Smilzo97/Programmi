@@ -6,7 +6,6 @@ winners_list=[]
 winner = ""
 sequence = []
 word = " "
-ok = True
 #global state2
 #state2 = True 
 
@@ -46,63 +45,81 @@ def initialize():
     #print(keyboard)
     random.shuffle(keyboard)
     print(keyboard)
-
-def turn (name):
-    print(name + " tocca a te")
-    print(sequence)
-    print("Scegli una lettera")
-    inchar=input('Inserisci lettera: ')
-    state = check_char(inchar,word)
-    return state
+    return word, sequence
 
 def reveal_char(c):
     global ok
-    count = 0 
     for i in range(len(word)):
         if c == word[i]:
            global sequence
            sequence[i] = c
-           count= count+1
-
         if count == 0:
            ok = False
         else:
             ok = True
-    print(ok)
+    #print(ok)
     return ok
 
            
 def check_char(c, word):
     print(word)
     if c in word:
-        print("letetra presente")
+        print("Lettera presente")
         keyboard.remove(c.upper())
         ok2 = reveal_char(c)
-        print(sequence)
-        print(ok2)
-        return ok2
+        #print(sequence)
+        #print(ok2)
+    else:
+        print("Lettera NON presente")
+        ok2 = False
+    return ok2
 
-def check_word():
+def check_word_status(sequence, word, count):
     mystr =""
+    end = True
     for i in sequence:
         mystr=mystr+i
 
     if mystr == word:
-        print("hai vinto")
+        print("HAI VINTO!")
+        print("Gioco finito")
+        end = False
+
+    if count == len(word):
+        print("HAI ESAURITO LE MOSSE")
+        print("Gioco finito")
+        end = False
+    return end
 
 def main():
-    player1 = insert_player()
-    player2 = insert_player()
-    while True:
-        initialize()
+    finish = True
+    player = insert_player()
+    while finish:
+        word = ""
+        word,sequence = initialize()
         #il gioco inizia
-        global state2
-        state2 = True
-        while state2:
-            state2 = turn(player1)
-            check_word()
-        turn(player2)
-        break
+        global count
+        count = 0
+        global play
+        play = True 
+        while play:
+            #print(name + " tocca a te")
+            print(sequence)
+            print("Scegli una lettera")
+            inchar=input('Inserisci lettera: ')
+            check_char_res = check_char(inchar,word)
+            if check_char_res == True:
+                print()
+            else:
+                count= count+1
+            play = check_word_status(sequence, word, count)
+    
+        another_game = input("Vuoi fare un'altra partita (S/n)?    ")
+        sequence.clear()
+        
+        if another_game == "n":
+            finish = False
+            
 
 if __name__ == "__main__":
     main()
