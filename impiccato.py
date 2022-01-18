@@ -2,26 +2,21 @@ import pandas as pd
 import random
 import string
 
-winners_list=[]
-winner = ""
 sequence = []
 word = " "
-#global state2
-#state2 = True 
 
-global state2
 def import_word_file():
     df_words = pd.read_csv("https://raw.githubusercontent.com/Smilzo97/Programmi/Inizio/lista_parole.csv")
     #print(df_words)
     words_list =df_words["PAROLE"]   
-    print(words_list)
+    #print(words_list)
     return words_list
 
 def chosen_word(w_list):
     #print(len(w_list))
     i = random.randint(0, len(w_list)-1)
-    print(w_list.iloc[i])
-    return w_list.iloc[i]
+    #print(w_list.iloc[i])
+    return w_list.iloc[i].upper()
 
 def insert_player():
     player = input('Inserisci nome giocatore: ')
@@ -29,12 +24,12 @@ def insert_player():
 
 def initialize():
     winner = ""
-    wl = import_word_file()
-    global word
-    word = str(chosen_word(wl))
     global keyboard
+    global word
     keyboard = []
     #print(word)
+    wl = import_word_file()
+    word = str(chosen_word(wl))
     for i in range(20 - (len(word))):
         keyboard.append(random.choice(string.ascii_letters).upper())  
     #print(keyboard)
@@ -44,7 +39,7 @@ def initialize():
         keyboard.append(char.upper())  
     #print(keyboard)
     random.shuffle(keyboard)
-    print(keyboard)
+    #print(keyboard)
     return word, sequence
 
 def reveal_char(c):
@@ -61,18 +56,19 @@ def reveal_char(c):
     return ok
 
            
-def check_char(c, word):
+def check_char(c, word, errors):
     print(word)
+    keyboard.remove(c.upper())
     if c in word:
         print("Lettera presente")
-        keyboard.remove(c.upper())
         ok2 = reveal_char(c)
         #print(sequence)
         #print(ok2)
     else:
         print("Lettera NON presente")
+        errors = errors+1
         ok2 = False
-    return ok2
+    return ok2, errors
 
 def check_word_status(sequence, word, count):
     mystr =""
@@ -81,33 +77,48 @@ def check_word_status(sequence, word, count):
         mystr=mystr+i
 
     if mystr == word:
-        print("HAI VINTO!")
+        print()
+        print("******************************************")
+        print("HAI VINTO! La parola era: "+ word)
         print("Gioco finito")
+        print("******************************************")
         end = False
 
     if count == len(word):
-        print("HAI ESAURITO LE MOSSE")
+        print("******************************************")
+        print("HAI ESAURITO LE MOSSE! La parola era: "+word)
         print("Gioco finito")
+        print("******************************************")
         end = False
     return end
 
 def main():
+    global play
+    global count
+    global errors
     finish = True
     player = insert_player()
+
     while finish:
         word = ""
         word,sequence = initialize()
         #il gioco inizia
-        global count
         count = 0
-        global play
+        errors = 0
         play = True 
+
         while play:
-            #print(name + " tocca a te")
+            #print(name + " tocca a te")à
+            print()
+            print("Mosse a disposizione: "+ str(len(word)-count))
+            print("Errori: "+ str(errors))
+            print()
             print(sequence)
+            print(keyboard)
             print("Scegli una lettera")
             inchar=input('Inserisci lettera: ')
-            check_char_res = check_char(inchar,word)
+
+            check_char_res, errors = check_char(inchar.upper(),word, errors)
             if check_char_res == True:
                 print()
             else:
@@ -116,10 +127,11 @@ def main():
     
         another_game = input("Vuoi fare un'altra partita (S/n)?    ")
         sequence.clear()
-        
+
         if another_game == "n":
             finish = False
-            
+
+    print("Arrivederci")            
 
 if __name__ == "__main__":
     main()
