@@ -30,7 +30,7 @@ def initialize():
     #print(word)
     wl = import_word_file()
     word = str(chosen_word(wl))
-    for i in range(20 - (len(word))):
+    for i in range(15 - (len(word))):
         keyboard.append(random.choice(string.ascii_letters).upper())  
     #print(keyboard)
     for char in word:
@@ -55,21 +55,24 @@ def reveal_char(c):
     #print(ok)
     return ok
 
+def delete_char(c):
+    for index in range(len(keyboard)):
+        print(keyboard[index])
+        if keyboard[index] == c:
+            keyboard.pop(index)
            
 def check_char(c, word, errors):
-    print(word)
-    #fare while per controllo carattere in keyboard
-    #if c in keyboard
-    keyboard.remove(c.upper())
-    
+    print(c)   
     if c in word:
         print("Lettera presente")
         ok2 = reveal_char(c)
+        delete_char(c)
         #print(sequence)
         #print(ok2)
     else:
         print("Lettera NON presente")
         errors = errors+1
+        delete_char(c)
         ok2 = False
     return ok2, errors
 
@@ -101,6 +104,7 @@ def main():
     global errors
     finish = True
     player = insert_player()
+   
 
     while finish:
         word = ""
@@ -112,6 +116,7 @@ def main():
 
         while play:
             #print(name + " tocca a te")à
+            in_seq = True
             print()
             print("Mosse a disposizione: "+ str(len(word)-count))
             print("Errori: "+ str(errors))
@@ -119,8 +124,14 @@ def main():
             print(sequence)
             print(keyboard)
             print("Scegli una lettera")
-            inchar=input('Inserisci lettera: ')
-
+            global inchar
+            while in_seq:
+                inchar=input('Inserisci lettera: ')
+                if inchar.upper() in keyboard:
+                    in_seq = False       
+                else:
+                    print("Inserisci un'altra lettera")
+                    print()         
             check_char_res, errors = check_char(inchar.upper(),word, errors)
             if check_char_res == True:
                 print()
