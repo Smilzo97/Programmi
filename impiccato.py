@@ -56,10 +56,10 @@ def reveal_char(c):
     return ok
 
 def delete_char(c):
-    for index in range(len(keyboard)):
-        print(keyboard[index])
-        if keyboard[index] == c:
-            keyboard.pop(index)
+    for index in keyboard:
+        #print(index)
+        if index == c:
+            keyboard.remove(index)
            
 def check_char(c, word, errors):
     print(c)   
