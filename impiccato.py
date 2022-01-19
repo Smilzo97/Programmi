@@ -58,7 +58,10 @@ def reveal_char(c):
            
 def check_char(c, word, errors):
     print(word)
+    #fare while per controllo carattere in keyboard
+    #if c in keyboard
     keyboard.remove(c.upper())
+    
     if c in word:
         print("Lettera presente")
         ok2 = reveal_char(c)
